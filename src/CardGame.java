@@ -1,13 +1,3 @@
-/*
- ICS3U1-7C summative
- UNO card game
- Aseer Baset
- 22/06/2022
-*/
-
-
-
-// imports the necessary libraries 
 import java.util.ArrayList; 
 import java.util.Random;
 import java.util.Scanner;
@@ -16,29 +6,27 @@ import java.util.Scanner;
 public class CardGame {
 	
 	// creates 4 array lists 
-    static ArrayList<Card> deck = new ArrayList<Card>(52);		// contains the deck
-    static ArrayList<Card> discard = new ArrayList<Card>();		// discard pile. This is where played cards go
-    static ArrayList<Card> hand1 = new ArrayList<Card>(7);		// Player 1's cards
-    static ArrayList<Card> hand2 = new ArrayList<Card>(7);		// player 2's cards
+    static ArrayList<Card> deck = new ArrayList<Card>(52);		
+    static ArrayList<Card> discard = new ArrayList<Card>();		
+    static ArrayList<Card> hand1 = new ArrayList<Card>(7);		
+    static ArrayList<Card> hand2 = new ArrayList<Card>(7);		
+
+    static int startAmount = 7, d, p1, p2, choice, select, c;				
+    static String player1, player2, choiceStr, selectStr, cSTR, contMenu;	
+    static boolean turnp1 = true, win = false, drawed;						
 
 
-    static int startAmount = 7, d, p1, p2, choice, select, c;				// all integar variables
-    static String player1, player2, choiceStr, selectStr, cSTR, contMenu;	// all string variables
-    static boolean turnp1 = true, win = false, drawed;						// all boolean variables
-
-
-    static Value v;						// value variable used to check if a card can be used as the starting card
-    static Card currentCard;			// stores the current card on top of the discard pile
+    static Value v;						
+    static Card currentCard;			
     
-    static Scanner in = new Scanner(System.in);			// opening a scanner 
-    static Random  rand = new Random();					// generate a random number
+    static Scanner in = new Scanner(System.in);			
+    static Random  rand = new Random();					
 
-    // creates a new constant type for card colours
+
     public static enum Colour {
         RED, YELLOW, GREEN, BLUE, WILD
     }
     
-    // creates a new constant type for card values
     public static enum Value {
         ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
         SKIP, REVERSE, DRAW_TWO, CARD, DRAW_FOUR
@@ -55,19 +43,18 @@ public class CardGame {
         public Colour colour;
         public Value value;
 
-        public Card(Colour c, Value v) {		// constructor 
+        public Card(Colour c, Value v) {		
             colour = c;
             value = v;
         }
 
-        @Override public String toString() {			// returns a string version of a card for printing
+        @Override public String toString() {			
             return this.colour + " " + this.value;
         }
     }
     
     // create the deck (half of a real UNO deck, so only 52 cards)
     public static void createDeck() {
-    	// adds all the regular, reverse skip and draw two cards
         for (int i = 0; i < cols.length-1; i++) {
 
             for (int x = 0; x < vals.length-2; x++) {
@@ -75,7 +62,6 @@ public class CardGame {
                 deck.add(new Card(cols[i], vals[x]));
             }
         }
-        // adds the wild cards and wild draw fours 
         deck.add(new Card(Colour.WILD, Value.CARD));
         deck.add(new Card(Colour.WILD, Value.CARD));
         deck.add(new Card(Colour.WILD, Value.DRAW_FOUR));
@@ -98,7 +84,6 @@ public class CardGame {
         discard.add(deck.remove(d));
         currentCard = discard.get(discard.size()-1);
         
-        // gives random cards from the deck to players
         for (int i = 0; i < startAmount; i++) {
 
             p1 = rand.nextInt(deck.size());
@@ -125,7 +110,6 @@ public class CardGame {
 
     // printing player cards with choice numbers
     static void showCardsHand() {
-    	// if it's player 1's turn
         if (turnp1 == true) {
 
             for (int i = 0; i < hand1.size(); i++) {
@@ -133,7 +117,6 @@ public class CardGame {
             }
 
             System.out.println("[100] DRAW CARD");
-        // if it's player 2's turn
         } else if (turnp1 == false) {
 
             for (int i = 0; i < hand2.size(); i++) {
@@ -146,15 +129,13 @@ public class CardGame {
    
     // checks if the card chosen by the player can be used or not
     static void checkCardValidity() {
-        drawed = false;					// false if a card wasn't drawn in the previous turn
+        drawed = false;					
         
-        // player 1's turn
         if (turnp1) {
 
             while (true) {
                 System.out.print("\r\nChoose card: ");
                 choiceStr = in.nextLine();
-                // if player types stop, return to menu
                 if (choiceStr.toLowerCase().equals("stop")) {
                     System.out.println("\r\n[     Returning to menu...     ]\r\n");
                     menu();
@@ -166,10 +147,9 @@ public class CardGame {
                     if ((choice == 100) || (hand1.get(choice).colour == Colour.WILD) || (currentCard.colour == Colour.WILD) ||
                     (hand1.get(choice).colour == currentCard.colour) || (hand1.get(choice).value == currentCard.value)) {
 
-                        if (choice == 100) {		// draw a card
-
+                        if (choice == 100) {		
                         	if (deck.size() >= 1) {
-                                drawed = true;		// when card is drawn, drawed stays true until the next turn
+                                drawed = true;		
                         		p1 = rand.nextInt(deck.size());
                         		hand1.add(deck.remove(p1));
                         		System.out.println("\n-> " + player1 + " drew a card. Turn skipped!\r\n");
@@ -177,25 +157,25 @@ public class CardGame {
                         	}
                         }
                     
-                        System.out.println("\r\n-> Card is compatible\r\n");	// print if card can be played
+                        System.out.println("\r\n-> Card is compatible\r\n");	
                         discard.add(hand1.remove(choice));
                         break;
 
                     } else if ((hand1.get(choice).colour != currentCard.colour) && (hand1.get(choice).value != currentCard.value)) {
 
-                        System.out.println("\r\n-> Card cannot be placed: \r\n");		// print if card cannot be played
+                        System.out.println("\r\n-> Card cannot be placed: \r\n");		
                     }
 
-                } catch (java.lang.IndexOutOfBoundsException e) {		// prevents crash if a number outside the give options is entered
+                } catch (java.lang.IndexOutOfBoundsException e) {		
 
                     System.out.println("\nInvalid choice: ");		
 
-                } catch (java.lang.NumberFormatException e) {		// prevents crash if something random is entered
+                } catch (java.lang.NumberFormatException e) {		
 
                     System.out.println("\nEnter a number from the choices: ");
                 }
             }
-        // player 2's turn (same code as player 1, but using player 2's information)
+		
         } else if (!turnp1) {
 
             while (true) {
@@ -247,14 +227,10 @@ public class CardGame {
 
     // checks if current card is a special card - if yes, does the effect.
     public static void specialCards() {
-    	// skip card - skips a turn
         if (currentCard.value == Value.SKIP) {
             System.out.println("~~~~~   Turn skiped!   ~~~~~\r\n");
-        // reverse card - same effect as skip card when only 2 players
         } else if (currentCard.value == Value.REVERSE) {
             System.out.println("~~~~~   Turns reversed!   ~~~~~\r\n");
-        // draw two card - adds 2 card to the other players cards if there is enough cards in the deck
-        // if deck doesn't have enough cards, used as a regular card
         } else if (currentCard.value == Value.DRAW_TWO) {
             p1 = rand.nextInt(deck.size());
 
@@ -274,10 +250,8 @@ public class CardGame {
                 System.out.println("~~~~~   Not enough card's in deck to draw 2... card was used without it's effect.   ~~~~~\r\n");
 
             }
-            turnp1 = !turnp1; // next players turn
+            turnp1 = !turnp1; 
             
-        // wild draw four - changes colour 
-        // if enough cards in the deck, adds 4 cards to the other player
         } else if (currentCard.value == Value.DRAW_FOUR) {
 
             if ((turnp1) && (deck.size() >= 4)) {
@@ -298,12 +272,11 @@ public class CardGame {
             } else {
                  System.out.println("~~~~~   Not enough card's in deck to draw 4... card will only change the colour   ~~~~~\r\n");
             }
-        // wild card - changes colour 
         } else if (currentCard.value == Value.CARD) {
             System.out.println("~~~~~     Wild card used! Play any card and the colour will be changed accordingly!     ~~~~~\r\n"); 
 
         } else {
-            turnp1 = !turnp1;	// if a non special card is used, switch turns
+            turnp1 = !turnp1;	
         }
     }
     
@@ -330,8 +303,6 @@ public class CardGame {
             contMenu = in.nextLine();
             menu();
          
-        // if the deck runs out of cards, player with less cards win
-        // if players have same amounts of cards, it's a tie
         } else if (deck.size() == 0) {
             System.out.println("[     The deck is out of cards. The game will end.     ]\r\n");
 
@@ -349,7 +320,6 @@ public class CardGame {
                     + "=============================================================================================\r\n");
             }
             
-            // waits until enter is pressed to return to menu
             System.out.println("\r\nPress enter to return to menu...\r\n");
             contMenu = in.nextLine();
             menu();
@@ -371,17 +341,14 @@ public class CardGame {
         dealCards();
         getPlayerNames();
 
-        // while no body has one
         while (!win) {
         	
-        	// prints which players turn it is
             if (turnp1) {
                 System.out.println("[     " + player1 + "'s turn     ]\n");
             } else if (!turnp1) {
                 System.out.println("[     " + player2 + "'s turn     ]\n");
             }
             
-            // displays current card
             System.out.println("Current card: " + currentCard);
             System.out.println("=============================");
 
@@ -389,7 +356,6 @@ public class CardGame {
             checkCardValidity();	
             currentCard = discard.get(discard.size()-1); // updates current card with the new played card
 
-            // win check
             if ((hand1.size() == 0) || (hand2.size() == 0) || (deck.size() == 0)) {
                 winnner();
                 win = true;
@@ -433,12 +399,11 @@ public class CardGame {
     	
     	while (true) {
     		
-    		selectStr = in.nextLine();		// takes input
+    		selectStr = in.nextLine();		
         	
         	try {
                 select = Integer.parseInt(selectStr);
 
-        		// ensures the input is one of the given options
         		if ((select != 1) && (select != 2 ) && (select != 3)) {  
         			System.out.print("\r\nPlease select one of the given options: ");
         			
@@ -477,14 +442,13 @@ public class CardGame {
         		}
         		
         	} catch (java.lang.NumberFormatException e) {
-    			System.out.print("\r\nPlease select a proper option: ");  // prevents crash if something random is entered
+    			System.out.print("\r\nPlease select a proper option: "); 
         	}	
     	}
     }
     
-    // main method
     public static void main(String[] args) {
-        menu();				// runs the menu method
-        in.close();			// closes the scanner
+        menu();				
+        in.close();			
     }
 }
