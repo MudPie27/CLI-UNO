@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 public class CardGame {
 	
-	// creates 4 array lists 
     static ArrayList<Card> deck = new ArrayList<Card>(52);		
     static ArrayList<Card> discard = new ArrayList<Card>();		
     static ArrayList<Card> hand1 = new ArrayList<Card>(7);		
